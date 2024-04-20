@@ -16,13 +16,13 @@ The Exchange Data (DEX) API is a project that provides services for accessing da
 2. Clone this repository to your local machine:
 
     ```bash
-    git clone https://github.com/your-username/repo-name.git
+    git clone https://github.com/0xSabdadev/mnxs_candlebooks_websocket.git
     ```
 
 3. Navigate to the project directory:
 
     ```bash
-    cd exchange-data-api/rest-api
+    cd mnxs_candlebooks_websocket/rest-api
     ```
 
 4. Install all dependencies by running the command:

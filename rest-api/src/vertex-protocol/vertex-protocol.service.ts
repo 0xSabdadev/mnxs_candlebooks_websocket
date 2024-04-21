@@ -13,7 +13,7 @@ export class VertexProtocolService {
   }
 
   private initWebSocket() {
-    this.ws = new WebSocket(process.env.VERTEXPROTOCOL_ORDERBOOK_URL);
+    this.ws = new WebSocket(process.env.VERTEXPROTOCOL_WEBSOCKET_URL);
     this.ws.on('open', () => {
       console.log('Connected to Vertex Protocol WebSocket');
     });

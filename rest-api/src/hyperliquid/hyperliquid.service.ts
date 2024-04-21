@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import WebSocket from 'ws';
+import * as WebSocket from 'ws';
 import { Observable, of } from 'rxjs';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class HyperliquidService {
   }
 
   private initWebSocket() {
-    const wsUrl = 'wss://api.hyperliquid.xyz/ws';
+    const wsUrl = process.env.HYPERLIQUID_WEBSOCKET_URL;
     this.ws = new WebSocket(wsUrl);
 
     this.ws.on('open', () => {
@@ -73,7 +73,7 @@ export class HyperliquidService {
     } else {
       return new Observable(observer => {
         this.ws.on('message', (data) => {
-          const parsedData = JSON.parse(data);
+          const parsedData = JSON.parse(data.toString());
           if (parsedData.subscription && coins.includes(parsedData.subscription.coin) && parsedData.data) {
             this.orderbooksCache[parsedData.subscription.coin] = parsedData.data;
             if (Object.keys(this.orderbooksCache).length === coins.length) {
@@ -98,7 +98,7 @@ export class HyperliquidService {
     } else {
       return new Observable(observer => {
         this.ws.on('message', (data) => {
-          const parsedData = JSON.parse(data);
+          const parsedData = JSON.parse(data.toString());
           if (parsedData.subscription && coins.includes(parsedData.subscription.coin) && parsedData.data) {
             this.candlesCache[parsedData.subscription.coin] = parsedData.data;
             if (Object.keys(this.candlesCache).length === coins.length) {

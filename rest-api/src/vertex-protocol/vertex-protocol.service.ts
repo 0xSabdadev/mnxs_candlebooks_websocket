@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import WebSocket from 'ws';
+import * as WebSocket from 'ws';
 import axios from 'axios';
 import { Observable, from, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -13,7 +13,7 @@ export class VertexProtocolService {
   }
 
   private initWebSocket() {
-    this.ws = new WebSocket('wss://gateway.prod.vertexprotocol.com/v1/ws');
+    this.ws = new WebSocket(process.env.VERTEXPROTOCOL_ORDERBOOK_URL);
     this.ws.on('open', () => {
       console.log('Connected to Vertex Protocol WebSocket');
     });
@@ -35,7 +35,7 @@ export class VertexProtocolService {
 
     return new Observable(observer => {
       this.ws.on('message', (data) => {
-        const parsedData = JSON.parse(data);
+        const parsedData = JSON.parse(data.toString());
         if (parsedData.request_type === 'query_order') {
           observer.next(parsedData.response);
         }
@@ -44,7 +44,7 @@ export class VertexProtocolService {
   }
 
   getCandlesticks(productId: number, granularity: number, limit: number): Observable<any> {
-    const restUrl = `https://gateway.prod.vertexprotocol.com/v1/archive`;
+    const restUrl = process.env.VERTEXPROTOCOL_CANDLE_URL;
     const requestBody = {
       candlesticks: {
         product_id: productId,
